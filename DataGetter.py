@@ -12,9 +12,9 @@ from Bio.Alphabet import IUPAC
 import multiprocessing
 import traceback
 
-								#######################################
-													# Main #
-								#######################################
+						#######################################
+								# Main #
+						#######################################
 
 def main():
 	list_path=recup_path()
@@ -30,12 +30,11 @@ def main():
 	shutil.rmtree(result_path+"fichierpoubelle")
 	### creation of a result file gathering strain result files ###
 	toutenun(result_path+"results")
-	#insertion db
 
 
-									######################################
-													# MacSyFinder #
-									######################################
+						######################################
+							    # MacSyFinder #
+						######################################
 
 def macsyfinder_wrapper(pathrep, result_path) :
 	### recovery of the file name from the path ###
@@ -137,9 +136,9 @@ def recup_macsyfinder(path_input, outdir, result_path):
 		shutil.make_archive(result_path+"archive/"+outdir.split("/")[-2]+"/MSF", 'gztar', root_dir=outdir.replace("/MSF", ""), base_dir='MSF')
 		shutil.rmtree(outdir)
 
-									######################################
-												       # Alien_Hunter #
-									######################################
+						######################################
+						           # Alien_Hunter #
+						######################################
 
 def alienhunter_wrapper(pathrep, result_path) :
 	### recovery of the file name from the path ###
@@ -170,10 +169,10 @@ def alienhunter_wrapper(pathrep, result_path) :
 					for l in resultAH:
 						if "misc_feature" in l:
 							key=record.id+"_PGI"+"_"+str(countPGI)
-							dict_numacc_data[key]=list()	#potential genetic island (PGI)
+							dict_numacc_data[key]=list()							#potential genetic island (PGI)
 							val=dict_numacc_data[key]
-							val.append(location_research.findall(l)[0])				#start position in the genome
-							val.append(location_research.findall(l)[1])				#end position in the genome
+							val.append(location_research.findall(l)[0])					#start position in the genome
+							val.append(location_research.findall(l)[1])					#end position in the genome
 						elif "score" in l:
 							key=record.id+"_PGI"+"_"+str(countPGI)
 							val=dict_numacc_data[key]
@@ -183,17 +182,17 @@ def alienhunter_wrapper(pathrep, result_path) :
 					### fill final file for this strain ###
 					tabfile=open(result_path+"results/"+pathrep.split("/")[-2]+".txt", 'a')
 					for key, val in dict_numacc_data.items():
-						tabfile.write("AH\t"+key.split("_")[0]+"_"+key.split("_")[1]+"\t"+str(val[0])+"\t"+str(val[1])+"\t"+key.split("_")[-2]+"\t"+str(val[2])+"\n")				#other info = score
+						tabfile.write("AH\t"+key.split("_")[0]+"_"+key.split("_")[1]+"\t"+str(val[0])+"\t"+str(val[1])+"\t"+key.split("_")[-2]+"\t"+str(val[2])+"\n")		#other_info = score
 					tabfile.close()
 				else:
-					logfile.write("Pas de resultat pour "+record.id+"\n")
+					logfile.write("No result for "+record.id+"\n")
 				shutil.make_archive(outdir+record.id, 'gztar', root_dir=outdir, base_dir=record.id)
 				shutil.rmtree(outdir+record.id)
 	logfile.close()
 
-								#######################################
-												# Integron_Finder #
-								#######################################
+						#######################################
+							  # Integron_Finder #
+						#######################################
 
 def integronfinder_wrapper(pathrep, result_path) :
 	file_fna=pathrep+pathrep.split("/")[-2]+"_genomic.fna" 
@@ -233,13 +232,13 @@ def recup_integron(id, pathrep, result_path):
 			val[2]="Partial_integron"
 		else:
 			val[2]="Complete_integron"
-		tabfile.write("IF\t"+key.split("_")[0]+"_"+key.split("_")[1]+"\t"+str(val[0])+"\t"+str(val[1])+"\t"+str(val[2])+"\n")		#colonne other info vide
+		tabfile.write("IF\t"+key.split("_")[0]+"_"+key.split("_")[1]+"\t"+str(val[0])+"\t"+str(val[1])+"\t"+str(val[2])+"\n")		#column other_info is empty
 	tabfile.close()
 
 
-									######################################
-													# Other functions #
-									######################################
+						######################################
+							  # Other functions #
+						######################################
 
 def recup_path():
 	path=sys.argv[1]
@@ -280,7 +279,7 @@ def toutenun_pour_R(cheminversouestlefichierresults):
 	if(cheminversouestlefichierresults[-1]!="/"):
 		cheminversouestlefichierresults=cheminversouestlefichierresults+"/"
 	fichierfinal=open(cheminversouestlefichierresults+"all_results_pour_R.tab", 'w')
-	fichierfinal.write("code_assemblie\tgenre\tespece\ttype_replicon\ttaille_replicon\tmethod\tid\tposition_start\tposition_end\ttype\n")				#on a pas besoin de la colonne other_info dans R
+	fichierfinal.write("code_assemblie\tgenre\tespece\ttype_replicon\ttaille_replicon\tmethod\tid\tposition_start\tposition_end\ttype\n")				#we don't need the column other_info in R
 	dict_ca_ge=crea_dict_codeassembly_genreespece()
 	dict_nar_tetr=crea_dict_numassreplicon_typeettaillereplicon()
 	for namefile in os.listdir(cheminversouestlefichierresults):
@@ -317,7 +316,9 @@ def toutenun(cheminversouestlefichierresults):
 			f.close()
 	fichierfinal.close()
 
-##### creation dico 			###
+	
+##### creation of dictionary #####
+					###
 def crea_dict_numassreplicon_typeettaillereplicon():
 	f=open("/dipro/clemplacement/PanteroDB_v0.3/03.database/genome_replicons.tab","r")
 	dico_path=dict()
@@ -334,6 +335,7 @@ def crea_dict_codeassembly_genreespece():
 		dico_path[val[0]]=val[3]
 	return (dico_path)
 
-		###
+					###
+
 
 main()
