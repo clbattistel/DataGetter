@@ -41,7 +41,7 @@ tar xzvf Integron_Finder-1.5.1.tar.gz
 cd Integron_Finder-1.5.1
 sudo pip install integron_finder
 
-ajouter a .bashrc
+#add to .bashrc
 export PATH=$PATH:/home/clem/Integron_Finder-1.5.1
 # or # export INTEGRON_HOME=/home/clem/Integron_Finder-1.5.1
 
